@@ -11,18 +11,4 @@ class SettingProvider extends ChangeNotifier {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("isDark", newTheme == ThemeMode.dark);
   }
-
-  Future<void> getTheme() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? isDark = prefs.getBool("isDark");
-    if (isDark != null) {
-      if (isDark) {
-        currentTheme = ThemeMode.dark;
-        notifyListeners();
-      } else {
-        currentTheme == ThemeMode.light;
-      }
-      notifyListeners();
-    }
-  }
 }

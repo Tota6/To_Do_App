@@ -1,12 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:todo_app/config/themes/app_colors.dart';
 import 'package:todo_app/config/themes/app_themes.dart';
 import 'package:todo_app/feature/login_page/login_page.dart';
 import 'package:todo_app/feature/settings_page/settings_tab.dart';
 import 'package:todo_app/firebase_options.dart';
-import 'core/provider/setting_provider.dart';
 import 'feature/home_page/home_page.dart';
 import 'feature/register_page/regester_page.dart';
 import 'feature/splash_page/splash_page.dart';
@@ -17,12 +15,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => SettingProvider()..getTheme(),
-      child: const MyApp(),
-    ),
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
