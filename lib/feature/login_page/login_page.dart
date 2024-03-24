@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/config/themes/app_colors.dart';
 import 'package:todo_app/core/widgets/custom_password_text_form_field.dart';
 import 'package:todo_app/core/widgets/custom_text_form_field.dart';
+import 'package:todo_app/data/database/user_dao.dart';
+import 'package:todo_app/data/dialog/dialog_utilits.dart';
 import 'package:todo_app/feature/home_page/home_page.dart';
+import 'package:todo_app/feature/register_page/regester_page.dart';
 import 'package:todo_app/firebase_errors_codes/firebase_errors_codes.dart';
 import '../../data/utilies/email_formatting.dart';
 
@@ -28,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.lightBackgroundColor,
+        color: Theme.of(context).colorScheme.background,
         image: const DecorationImage(
           fit: BoxFit.fill,
           image: AssetImage(
@@ -43,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
           shadowColor: AppColors.transparentColor,
           surfaceTintColor: AppColors.transparentColor,
           title: Text(
-            "Register Page",
+            "LoginPage",
             style: Theme.of(context).textTheme.labelLarge,
           ),
           backgroundColor: AppColors.transparentColor,
@@ -87,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                         backgroundColor: AppColors.lightPrimaryColor,
                       ),
                       onPressed: () {
-                        Login();
+                        login();
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(
@@ -103,7 +106,31 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                  )
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20.0,
+                        right: 20.0,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushReplacementNamed(RegisterPage.routeName);
+                        },
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Don't Have an Account? ",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -113,21 +140,32 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void Login() async {
+  void login() async {
+    DialogUtils.showLoadingDialog(context, "Loading");
     if (formKey.currentState?.validate() == false) {
-    } else {
-      Navigator.pushReplacementNamed(context, HomePage.routeName);
+      return;
     }
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
+      DialogUtils.hideLoadingDialog(context);
+      DialogUtils.showMassage(context, "You Logged in Successfully",
+          isDismissible: false, posActionsTitle: "ok", posAction: () {
+        Navigator.pushReplacementNamed(context, HomePage.routeName);
+      });
+      UserDao.getUser(credential.user!.uid);
     } on FirebaseAuthException catch (e) {
+      DialogUtils.hideLoadingDialog(context);
       if (e.code == FirebaseErrorCodes.emailAlreadyInUse) {
-        print('No user found for that email.');
+        DialogUtils.showMassage(
+          context,
+          "No user found for that email.",
+        );
       } else if (e.code == FirebaseErrorCodes.weakPassword) {
-        print('Wrong password provided for that user.');
+        DialogUtils.showMassage(
+            context, 'Wrong password provided for that user.');
       }
     } catch (e) {
       print(e);

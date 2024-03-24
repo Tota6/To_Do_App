@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../config/themes/app_colors.dart';
+
 class ToDoListTab extends StatelessWidget {
   static const String routeName = "ToDoListTab";
 
@@ -8,7 +10,7 @@ class ToDoListTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black,
+      color: Theme.of(context).colorScheme.background,
     );
   }
 }

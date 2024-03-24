@@ -1,14 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/config/themes/app_colors.dart';
 import 'package:todo_app/core/widgets/custom_password_text_form_field.dart';
 import 'package:todo_app/core/widgets/custom_text_form_field.dart';
+import 'package:todo_app/data/database/user_dao.dart';
+import 'package:todo_app/data/dialog/dialog_utilits.dart';
 import 'package:todo_app/feature/home_page/home_page.dart';
 import 'package:todo_app/feature/login_page/login_page.dart';
 import 'package:todo_app/firebase_errors_codes/firebase_errors_codes.dart';
 import '../../core/provider/setting_provider.dart';
+import '../../data/database/model/user.dart' as MyUser;
 import '../../data/utilies/email_formatting.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -41,9 +43,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.isDarkSelected
-            ? AppColors.darkPrimaryColor
-            : AppColors.lightBackgroundColor,
+        color: Theme.of(context).colorScheme.background,
         image: const DecorationImage(
           fit: BoxFit.fill,
           image: AssetImage(
@@ -52,9 +52,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
       child: Scaffold(
-        backgroundColor: provider.currentTheme == ThemeMode.light
-            ? AppColors.lightBackgroundColor
-            : AppColors.darkBackgroundColor,
+        backgroundColor: AppColors.transparentColor,
         appBar: AppBar(
           elevation: 0,
           shadowColor: AppColors.transparentColor,
@@ -203,22 +201,42 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void createAccount() async {
     if (formKey.currentState?.validate() == false) {
-    } else {
-      Navigator.pushReplacementNamed(context, HomePage.routeName);
+      return;
     }
     try {
+      DialogUtils.showLoadingDialog(context, "Loading...");
       final credential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
               email: emailController.text, password: passwordController.text);
-      print(credential.user?.uid);
+      await UserDao.addUser(
+        MyUser.User(
+          id: credential.user?.uid,
+          fullName: fullNameController.text,
+          userName: userNameController.text,
+          email: emailController.text,
+        ),
+      );
+      DialogUtils.hideLoadingDialog(context);
+      DialogUtils.showMassage(context, "Register Successfully",
+          posActionsTitle: "Ok", posAction: () {
+        Navigator.pushReplacementNamed(context, HomePage.routeName);
+      });
     } on FirebaseAuthException catch (e) {
+      DialogUtils.hideLoadingDialog(context);
       if (e.code == FirebaseErrorCodes.emailAlreadyInUse) {
-        print('The account is already exists for that email.');
+        DialogUtils.showMassage(
+            context, 'The account is already exists for that email.');
       } else if (e.code == FirebaseErrorCodes.weakPassword) {
-        print('Wrong password provided for that user.');
+        DialogUtils.showMassage(
+            context, 'Wrong password provided for that user.');
       }
     } catch (e) {
       print(e);
+      DialogUtils.showMassage(
+        context,
+        "Somthing Went Wrong",
+        posActionsTitle: "OK",
+      );
     }
   }
 }
