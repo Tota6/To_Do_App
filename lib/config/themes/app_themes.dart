@@ -12,7 +12,7 @@ class AppThemeData {
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       elevation: 0,
-      backgroundColor: AppColors.transparentColor,
+      backgroundColor: AppColors.lightCardColor,
       selectedIconTheme: IconThemeData(
         color: AppColors.lightPrimaryColor,
         size: 40,
@@ -64,10 +64,17 @@ class AppThemeData {
         fontWeight: FontWeight.bold,
         color: AppColors.lightCardColor,
       ),
+      titleSmall: TextStyle(
+        //black
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        color: AppColors.lightPrimaryTextColor,
+      ),
     ),
   );
 
   static ThemeData darkTheme = ThemeData(
+    useMaterial3: false,
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.darkPrimaryColor,
       toolbarHeight: 170,
@@ -77,9 +84,9 @@ class AppThemeData {
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       elevation: 0,
-      backgroundColor: AppColors.transparentColor,
+      backgroundColor: AppColors.darkCardColor,
       selectedIconTheme: IconThemeData(
-        color: AppColors.darkPrimaryColor,
+        color: AppColors.darkAppBarColor,
         size: 40,
       ),
       unselectedIconTheme: IconThemeData(
@@ -101,34 +108,42 @@ class AppThemeData {
       onSurface: AppColors.darkBackgroundColor,
     ),
     textTheme: TextTheme(
-      bodyMedium: const TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w700,
-      ),
-      labelLarge: const TextStyle(
-        fontSize: 25,
-        fontWeight: FontWeight.bold,
-      ),
-      labelMedium: TextStyle(
-        color: AppColors.darkPrimaryTextColor,
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
-      labelSmall: TextStyle(
-        color: AppColors.darkPrimaryTextColor,
-        fontSize: 12,
-        fontWeight: FontWeight.bold,
-      ),
-      titleMedium: TextStyle(
-        color: AppColors.darkPrimaryTextColor,
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-      ),
-      titleLarge: TextStyle(
-        fontSize: 22,
-        fontWeight: FontWeight.bold,
-        color: AppColors.darkCardColor,
-      ),
-    ),
+        bodyMedium: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+        ),
+        labelLarge: const TextStyle(
+          fontSize: 25,
+          fontWeight: FontWeight.bold,
+        ),
+        labelMedium: TextStyle(
+          //white
+          color: AppColors.darkPrimaryTextColor,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+        labelSmall: TextStyle(
+          color: AppColors.darkPrimaryTextColor,
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+        ),
+        titleLarge: TextStyle(
+          //white
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+          color: AppColors.darkCardColor,
+        ),
+        titleMedium: TextStyle(
+          //white
+          color: AppColors.darkPrimaryTextColor,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+        titleSmall: TextStyle(
+          //black
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: AppColors.darkPrimaryTextColor,
+        )),
   );
 }

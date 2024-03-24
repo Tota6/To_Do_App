@@ -5,7 +5,7 @@ class AppColors {
   static Color doneComponentColor = const Color(0xff5D9CEC);
   static Color deletedBackgroundColor = const Color(0xffEC4B4B);
   static Color transparentColor = Colors.transparent;
-  static Color unSelectedColor = const Color(0xffC8C9CB);
+  static Color unSelectedColor = const Color(0xff707070);
 
   static Color lightPrimaryColor = const Color(0xff5D9CEC);
   static Color lightCardColor = const Color(0xffFFFFFF);
